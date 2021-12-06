@@ -11,7 +11,7 @@ import { GaodeMapV2 } from "@antv/l7-maps";
  * 图层触发的事件跟zIndex无关，只跟插入图层先后顺序有关。
  * 1, point先add, zIndex=2; line后add, zIndex=1, 点击point跟line交界的地方，触发的是line-click事件
  * 2, line先add, zIndex=2; point后add, zIndex=1,点击line跟point交界的地方，触发的是point-click事件
- * 
+ *
  */
 
 const linePath = [
@@ -24,6 +24,30 @@ const linePath = [
   },
 ];
 
+const lineLayer = new LineLayer({ zIndex: 2 })
+  .source(linePath, {
+    parser: {
+      type: "json",
+      coordinates: "path",
+    },
+  })
+  .size(4)
+  .shape("line")
+  .texture("02")
+  .color("#25d8b7")
+  .animate({
+    interval: 1, // 间隔
+    duration: 1, // 持续时间，延时
+    trailLength: 2, // 流线长度
+  })
+  .style({
+    lineTexture: true, // 开启线的贴图功能
+    iconStep: 20, // 设置贴图纹理的间距
+  });
+lineLayer.on("click", () => {
+  console.log("点击线");
+});
+
 const pointData = [
   {
     lng: 115.810471,
@@ -31,51 +55,28 @@ const pointData = [
   },
 ];
 
+const pointLayer = new PointLayer({ zIndex: 1 })
+  .source(pointData, {
+    parser: {
+      type: "json",
+      x: "lng",
+      y: "lat",
+    },
+  })
+  .shape("00")
+  .size(10)
+  .color("red")
+  .style({
+    opacity: 1,
+    strokeWidth: 1,
+  });
+pointLayer.on("click", () => {
+  console.log("点击点");
+});
+
 const addLayer = (scene) => {
-  const lineLayer = new LineLayer({ zIndex: 2 })
-    .source(linePath, {
-      parser: {
-        type: "json",
-        coordinates: "path",
-      },
-    })
-    .size(4)
-    .shape("line")
-    .texture("02")
-    .color("#25d8b7")
-    .animate({
-      interval: 1, // 间隔
-      duration: 1, // 持续时间，延时
-      trailLength: 2, // 流线长度
-    })
-    .style({
-      lineTexture: true, // 开启线的贴图功能
-      iconStep: 20, // 设置贴图纹理的间距
-    });
-  lineLayer.on("click", () => {
-    console.log("点击线");
-  });
+  // 这里顺序调换，搭配图层zIndex 会有不同效果
   scene.addLayer(lineLayer);
-
-  const pointLayer = new PointLayer({ zIndex: 1 })
-    .source(pointData, {
-      parser: {
-        type: "json",
-        x: "lng",
-        y: "lat",
-      },
-    })
-    .shape("00")
-    .size(10)
-    .color("red")
-    .style({
-      opacity: 1,
-      strokeWidth: 1,
-    });
-  pointLayer.on("click", () => {
-    console.log("点击点");
-  });
-
   scene.addLayer(pointLayer);
 };
 
