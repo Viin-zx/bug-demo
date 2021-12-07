@@ -44,13 +44,6 @@ const lineLayer = new LineLayer({ zIndex: 2 })
     lineTexture: true, // 开启线的贴图功能
     iconStep: 20, // 设置贴图纹理的间距
   });
-lineLayer.on("click", () => {
-  console.log("点击线");
-});
-lineLayer.on("contextmenu", (e) => {
-  e.target.stopPropagation();
-  console.log("右键点击线");
-});
 
 const pointData = [
   {
@@ -74,16 +67,30 @@ const pointLayer = new PointLayer({ zIndex: 1 })
     opacity: 1,
     strokeWidth: 1,
   });
-pointLayer.on("click", () => {
-  console.log("点击点");
-});
-pointLayer.on("contextmenu", (e) => {
-  e.target.stopPropagation();
-  console.log("右键点击点");
-});
 
 const addLayer = (scene) => {
   // 这里顺序调换，搭配图层zIndex 会有不同效果
+  pointLayer.on("click", () => {
+    console.log("点击点");
+  });
+  pointLayer.on("contextmenu", (e) => {
+    e.target.stopPropagation();
+    console.log("右键点击点");
+  });
+  lineLayer.on("click", () => {
+    console.log("点击线");
+  });
+  lineLayer.on("contextmenu", (e) => {
+    e.target.stopPropagation();
+    console.log("右键点击线");
+  });
+  scene.on("click", () => {
+    console.log("左键点击场景");
+  });
+  scene.on("contextmenu", () => {
+    console.log("右键场景");
+  });
+
   scene.addLayer(lineLayer);
   scene.addLayer(pointLayer);
 };
