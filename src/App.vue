@@ -31,7 +31,7 @@ const lineLayer = new LineLayer({ zIndex: 2 })
       coordinates: "path",
     },
   })
-  .size(4)
+  .size(6)
   .shape("line")
   .texture("02")
   .color("#25d8b7")
@@ -46,6 +46,10 @@ const lineLayer = new LineLayer({ zIndex: 2 })
   });
 lineLayer.on("click", () => {
   console.log("点击线");
+});
+lineLayer.on("contextmenu", (e) => {
+  e.target.stopPropagation();
+  console.log("右键点击线");
 });
 
 const pointData = [
@@ -72,6 +76,10 @@ const pointLayer = new PointLayer({ zIndex: 1 })
   });
 pointLayer.on("click", () => {
   console.log("点击点");
+});
+pointLayer.on("contextmenu", (e) => {
+  e.target.stopPropagation();
+  console.log("右键点击点");
 });
 
 const addLayer = (scene) => {
