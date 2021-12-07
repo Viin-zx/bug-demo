@@ -69,7 +69,7 @@ const pointLayer = new PointLayer({ zIndex: 1 })
   });
 
 const addLayer = (scene) => {
-  // 这里顺序调换，搭配图层zIndex 会有不同效果
+  // 所有click事件都有用，contextmenu没用
   pointLayer.on("click", () => {
     console.log("点击点");
   });
